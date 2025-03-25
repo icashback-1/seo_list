@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, AlertCircle, Settings, Search, FileText, Link, Map, BarChart, RefreshCw, Circle } from 'lucide-react';
-import { getTasks, toggleTaskCompletion, calculateCompletion, calculateOverallCompletion } from '@/app/actions';
+import { toggleTaskCompletion, calculateCompletion, calculateOverallCompletion } from '@/app/actions';
+import { useISRRefresh } from '@/lib/hooks';
 
 // Define task interface for type safety
 interface Task {
@@ -30,6 +31,30 @@ interface TasksState {
   [key: string]: Task[]; // Add index signature for string access
 }
 
+// Define activity log interface
+interface ActivityLogEntry {
+  type: string;
+  message: string;
+  timestamp: number;
+}
+
+// Define SEO score interface
+interface SEOScore {
+  overall: number;
+  content: number;
+  links: number;
+  performance: number;
+  mobile: number;
+}
+
+// Define integration status interface
+interface IntegrationStatus {
+  google: boolean;
+  ahrefs: boolean;
+  semrush: boolean;
+  analytics: boolean;
+}
+
 // Define tab content interface
 interface TabContent {
   title: string;
@@ -44,35 +69,37 @@ type TabContentMapping = {
   [key in keyof TasksState]: TabContent;
 };
 
-const SEODashboard = () => {
+// Define props for the component
+interface SEODashboardProps {
+  initialTasks: TasksState;
+  initialActivityLog: ActivityLogEntry[];
+  initialSeoScore: SEOScore;
+  initialIntegrationStatus: IntegrationStatus;
+  initialOverallCompletion: number;
+  initialCategoryCompletions: Record<string, number>;
+}
+
+const SEODashboard = ({ 
+  initialTasks, 
+  initialActivityLog,
+  initialSeoScore,
+  initialIntegrationStatus,
+  initialOverallCompletion,
+  initialCategoryCompletions
+}: SEODashboardProps) => {
   const [activeTab, setActiveTab] = useState<keyof TasksState>('indiancashback');
-  const [tasks, setTasks] = useState<TasksState | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [tasks, setTasks] = useState<TasksState>(initialTasks);
+  const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [updatingTask, setUpdatingTask] = useState<{ category: string, taskId: number } | null>(null);
-  const [categoryCompletions, setCategoryCompletions] = useState<Record<string, number>>({});
-  const [overallCompletion, setOverallCompletion] = useState(0);
+  const [categoryCompletions, setCategoryCompletions] = useState<Record<string, number>>(initialCategoryCompletions);
+  const [overallCompletion, setOverallCompletion] = useState(initialOverallCompletion);
   
-  // Fetch tasks from Redis on component mount
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const tasksData = await getTasks();
-        setTasks(tasksData);
-        
-        // Calculate completion percentages
-        await updateCompletionStats(tasksData);
-      } catch (error) {
-        console.error('Error fetching tasks:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchTasks();
-  }, []);
+  // Use our custom hook for refreshing data
+  const { refreshData, isRefreshing } = useISRRefresh();
 
-  // Update completion statistics
+  // No need for initial data fetching since we're using ISR
+  // Just update data when tasks change
   const updateCompletionStats = async (tasksData: TasksState) => {
     try {
       // Calculate overall completion
@@ -100,6 +127,9 @@ const SEODashboard = () => {
       
       // Update completion stats with the new data
       await updateCompletionStats(updatedTasks);
+      
+      // Trigger a revalidation to ensure other clients get the updated data
+      await refreshData();
     } catch (error) {
       console.error('Error toggling task completion:', error);
     } finally {
@@ -108,31 +138,13 @@ const SEODashboard = () => {
     }
   };
   
-  // Skip rendering until tasks are loaded
+  // Loading state is simpler now since we have initial data
   if (loading) {
     return (
       <div className="w-full max-w-6xl mx-auto p-4 bg-gray-50 flex items-center justify-center min-h-[400px]">
         <div className="flex flex-col items-center gap-2">
           <RefreshCw className="h-8 w-8 text-orange-500 animate-spin" />
-          <p className="text-gray-600">Loading SEO tasks...</p>
-        </div>
-      </div>
-    );
-  }
-  
-  if (!tasks) {
-    return (
-      <div className="w-full max-w-6xl mx-auto p-4 bg-gray-50">
-        <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-red-500 mt-0.5" />
-            <div>
-              <h3 className="text-sm font-medium text-red-800">Error Loading Tasks</h3>
-              <p className="text-sm text-red-700 mt-1">
-                Unable to load SEO tasks. Please refresh the page or check your Redis connection.
-              </p>
-            </div>
-          </div>
+          <p className="text-gray-600">Updating SEO tasks...</p>
         </div>
       </div>
     );
@@ -406,6 +418,18 @@ Best regards,
                 <span className="font-semibold text-orange-600">{overallCompletion}% Complete</span>
               </div>
             </div>
+            <button 
+              onClick={refreshData} 
+              className="ml-4 p-2 bg-orange-100 rounded-lg text-orange-700 hover:bg-orange-200 transition-colors"
+              title="Refresh dashboard data"
+              disabled={isRefreshing}
+            >
+              {isRefreshing ? (
+                <RefreshCw className="h-5 w-5 animate-spin" />
+              ) : (
+                <RefreshCw className="h-5 w-5" />
+              )}
+            </button>
           </div>
         </div>
         
