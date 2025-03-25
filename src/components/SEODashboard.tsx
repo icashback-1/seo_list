@@ -31,30 +31,6 @@ interface TasksState {
   [key: string]: Task[]; // Add index signature for string access
 }
 
-// Define activity log interface
-interface ActivityLogEntry {
-  type: string;
-  message: string;
-  timestamp: number;
-}
-
-// Define SEO score interface
-interface SEOScore {
-  overall: number;
-  content: number;
-  links: number;
-  performance: number;
-  mobile: number;
-}
-
-// Define integration status interface
-interface IntegrationStatus {
-  google: boolean;
-  ahrefs: boolean;
-  semrush: boolean;
-  analytics: boolean;
-}
-
 // Define tab content interface
 interface TabContent {
   title: string;
