@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, AlertCircle, Clock, Settings, Search, Code, FileText, Link, Map, BarChart, RefreshCw, Circle } from 'lucide-react';
+import { CheckCircle, AlertCircle, Settings, Search, FileText, Link, Map, BarChart, RefreshCw, Circle } from 'lucide-react';
 import { getTasks, toggleTaskCompletion, calculateCompletion, calculateOverallCompletion } from '@/app/actions';
 
 // Define task interface for type safety
@@ -23,6 +23,10 @@ interface TasksState {
   ongoing: Task[];
   seo_analyst: Task[];
   backlinks: Task[];
+  indiancashback: Task[];
+  india_specific: Task[];
+  indiancashback_backlinks: Task[];
+  indiancashback_technical: Task[];
   [key: string]: Task[]; // Add index signature for string access
 }
 
@@ -41,7 +45,7 @@ type TabContentMapping = {
 };
 
 const SEODashboard = () => {
-  const [activeTab, setActiveTab] = useState<keyof TasksState>('technical');
+  const [activeTab, setActiveTab] = useState<keyof TasksState>('indiancashback');
   const [tasks, setTasks] = useState<TasksState | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
@@ -109,7 +113,7 @@ const SEODashboard = () => {
     return (
       <div className="w-full max-w-6xl mx-auto p-4 bg-gray-50 flex items-center justify-center min-h-[400px]">
         <div className="flex flex-col items-center gap-2">
-          <RefreshCw className="h-8 w-8 text-blue-500 animate-spin" />
+          <RefreshCw className="h-8 w-8 text-orange-500 animate-spin" />
           <p className="text-gray-600">Loading SEO tasks...</p>
         </div>
       </div>
@@ -135,7 +139,95 @@ const SEODashboard = () => {
   }
 
   // Tab content mapping
-  const tabContent: TabContentMapping = {
+  const tabContent = {
+    indiancashback: {
+      title: 'IndianCashback',
+      icon: <RefreshCw className="h-5 w-5" />,
+      description: 'IndianCashback.com site-specific optimization tasks',
+      implementation: `// Example: Cashback offer schema markup
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Offer",
+  "itemOffered": {
+    "@type": "Product",
+    "name": "Flipkart Electronics"
+  },
+  "seller": {
+    "@type": "Organization",
+    "name": "Flipkart"
+  },
+  "discount": "7% Cashback",
+  "eligibleQuantity": {
+    "@type": "QuantitativeValue",
+    "minValue": "1"
+  },
+  "priceValidUntil": "2024-12-31"
+}
+</script>`,
+      tasks: tasks?.indiancashback || []
+    },
+    india_specific: {
+      title: 'India-Specific SEO',
+      icon: <Map className="h-5 w-5" />,
+      description: 'Optimization for Indian market and users',
+      implementation: `// Example: hreflang implementation for Indian market
+<link rel="alternate" href="https://www.indiancashback.com/" hreflang="en-in" />
+<link rel="alternate" href="https://hi.indiancashback.com/" hreflang="hi-in" />`,
+      tasks: tasks?.india_specific || []
+    },
+    indiancashback_backlinks: {
+      title: 'IC Backlinks',
+      icon: <Link className="h-5 w-5" />,
+      description: 'IndianCashback-specific backlink strategy',
+      implementation: `// Example: Structured outreach email for Indian finance bloggers
+Subject: Exclusive cashback data for your [Blog Name] readers
+
+Hi [Name],
+
+I'm [Your Name] from IndianCashback.com, India's leading cashback platform.
+
+We've just completed a study on "Average Cashback Savings During Diwali Sales" and found that shoppers can save an extra ₹3,500 during festival season through strategic cashback use.
+
+Would you be interested in featuring this data in your upcoming festival shopping guide? We can provide:
+- Exclusive infographic with complete data
+- Custom cashback offer for your readers (8% vs. standard 5%)
+- Expert quotes about maximizing festival savings
+
+Let me know if this would be valuable for your audience!
+
+Best,
+[Your Name]`,
+      tasks: tasks?.indiancashback_backlinks || []
+    },
+    indiancashback_technical: {
+      title: 'IC Technical SEO',
+      icon: <Settings className="h-5 w-5" />,
+      description: 'Technical optimizations for cashback functionality',
+      implementation: `// Example: URL structure for merchant pages
+# Current URL structure (not SEO friendly)
+https://indiancashback.com/store?id=45&name=amazon
+
+# Improved URL structure
+https://indiancashback.com/amazon
+
+# Redirect setup in Next.js
+// pages/[merchant].js
+export async function getStaticPaths() {
+  const merchants = await fetchMerchants();
+  const paths = merchants.map((m) => ({ 
+    params: { merchant: m.slug } 
+  }));
+  
+  return { paths, fallback: 'blocking' };
+}
+
+export async function getStaticProps({ params }) {
+  const merchant = await fetchMerchantBySlug(params.merchant);
+  return { props: { merchant }, revalidate: 3600 };
+}`,
+      tasks: tasks?.indiancashback_technical || []
+    },
     technical: {
       title: 'Technical SEO',
       icon: <Settings className="h-5 w-5" />,
@@ -148,7 +240,7 @@ Allow: /
 
 # Sitemap URL
 Sitemap: https://example.com/sitemap.xml`,
-      tasks: tasks.technical
+      tasks: tasks?.technical || []
     },
     content: {
       title: 'Content Optimization',
@@ -160,7 +252,7 @@ Sitemap: https://example.com/sitemap.xml`,
   <meta name="description" content="Compelling description with target keywords">
   <link rel="canonical" href="https://example.com/page" />
 </head>`,
-      tasks: tasks.content
+      tasks: tasks?.content || []
     },
     internal: {
       title: 'Internal Linking',
@@ -170,7 +262,7 @@ Sitemap: https://example.com/sitemap.xml`,
 <a href="/related-page" title="Learn more about this topic">
   Learn more about <strong>keyword-rich anchor text</strong>
 </a>`,
-      tasks: tasks.internal
+      tasks: tasks?.internal || []
     },
     local: {
       title: 'Local SEO',
@@ -194,7 +286,7 @@ Sitemap: https://example.com/sitemap.xml`,
   "url": "https://www.example.com"
 }
 </script>`,
-      tasks: tasks.local
+      tasks: tasks?.local || []
     },
     analytics: {
       title: 'Analytics',
@@ -209,7 +301,7 @@ Sitemap: https://example.com/sitemap.xml`,
   gtag('js', new Date());
   gtag('config', 'G-XXXXXXXXXX');
 </script>`,
-      tasks: tasks.analytics
+      tasks: tasks?.analytics || []
     },
     ongoing: {
       title: 'Ongoing Tasks',
@@ -238,7 +330,7 @@ async function testPageSpeed() {
 
 // Run weekly
 schedule.scheduleJob('0 0 * * 0', testPageSpeed);`,
-      tasks: tasks.ongoing
+      tasks: tasks?.ongoing || []
     },
     seo_analyst: {
       title: 'SEO Analyst Tasks',
@@ -262,7 +354,7 @@ schedule.scheduleJob('0 0 * * 0', testPageSpeed);`,
     "meta_description": "Shop our collection of premium wireless Bluetooth headphones with noise cancellation and 24-hour battery life. Free shipping on orders over $50."
   }
 }`,
-      tasks: tasks.seo_analyst
+      tasks: tasks?.seo_analyst || []
     },
     backlinks: {
       title: 'Backlink Building',
@@ -283,9 +375,9 @@ Would you consider adding a link to our resource in your article? I'd be happy t
 
 Best regards,
 [Your Name]`,
-      tasks: tasks.backlinks
+      tasks: tasks?.backlinks || []
     }
-  };
+  } as TabContentMapping;
 
   // Get the completion percentage for a category
   const getCompletionByCategory = (category: string) => {
@@ -297,16 +389,21 @@ Best regards,
       {/* Header */}
       <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">On-Site SEO Dashboard</h1>
-            <p className="text-gray-600">Developer implementation tracking</p>
+          <div className="flex items-center gap-3">
+            <div className="bg-orange-100 p-2 rounded-lg flex items-center justify-center">
+              <span className="text-orange-700 font-bold text-xl">IC</span>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-800">IndianCashback SEO Dashboard</h1>
+              <p className="text-gray-600">Cashback website SEO implementation tracking</p>
+            </div>
           </div>
           <div className="flex items-center">
             <div className="bg-gray-100 p-2 rounded-lg">
               <div className="flex items-center gap-2">
                 <Search className="h-5 w-5 text-gray-500" />
                 <span className="text-sm font-medium">SEO Status: </span>
-                <span className="font-semibold text-blue-600">{overallCompletion}% Complete</span>
+                <span className="font-semibold text-orange-600">{overallCompletion}% Complete</span>
               </div>
             </div>
           </div>
@@ -316,7 +413,7 @@ Best regards,
         <div className="mt-6">
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div 
-              className="bg-blue-600 h-2.5 rounded-full" 
+              className="bg-orange-600 h-2.5 rounded-full" 
               style={{ width: `${overallCompletion}%` }}
             ></div>
           </div>
@@ -337,7 +434,7 @@ Best regards,
               onClick={() => setActiveTab(tab as keyof TasksState)}
               className={`flex items-center gap-2 px-4 py-3 font-medium text-sm ${
                 activeTab === tab
-                  ? 'text-blue-600 border-b-2 border-blue-600'
+                  ? 'text-orange-600 border-b-2 border-orange-600'
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -362,19 +459,19 @@ Best regards,
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-medium text-gray-800">
               <div className="flex items-center gap-2">
-                {tabContent[activeTab].icon}
-                {tabContent[activeTab].title} Tasks
+                {tabContent[activeTab]?.icon}
+                {tabContent[activeTab]?.title || activeTab} Tasks
               </div>
             </h2>
             <span className="text-sm text-gray-500">
-              {tabContent[activeTab].tasks.filter(t => t.completed).length} of {tabContent[activeTab].tasks.length} complete
+              {tabContent[activeTab]?.tasks?.filter?.(t => t.completed)?.length || 0} of {tabContent[activeTab]?.tasks?.length || 0} complete
             </span>
           </div>
           
-          <p className="text-gray-600 mb-4">{tabContent[activeTab].description}</p>
+          <p className="text-gray-600 mb-4">{tabContent[activeTab]?.description || ''}</p>
           
           <div className="space-y-3 mt-4">
-            {tabContent[activeTab].tasks.map((task) => (
+            {tabContent[activeTab]?.tasks?.map((task) => (
               <div key={task.id} className="flex items-center justify-between p-2 mb-2 border rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
                 <div className="flex-1">
                   <span className={`font-medium ${task.completed ? 'line-through text-gray-500' : ''}`}>{task.name}</span>
@@ -384,11 +481,11 @@ Best regards,
                 <button
                   onClick={() => handleToggleTaskCompletion(activeTab as string, task.id)}
                   disabled={updating}
-                  className={`p-2 rounded-full ${task.completed ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'} 
+                  className={`p-2 rounded-full ${task.completed ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-700'} 
                     hover:bg-opacity-80 transition-colors ${updating && updatingTask?.category === activeTab && updatingTask?.taskId === task.id ? 'opacity-50 cursor-wait' : ''}`}
                 >
                   {updating && updatingTask?.category === activeTab && updatingTask?.taskId === task.id ? (
-                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-orange-600" />
                   ) : task.completed ? (
                     <CheckCircle size={20} />
                   ) : (
@@ -404,7 +501,7 @@ Best regards,
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <h2 className="text-lg font-medium text-gray-800 mb-4">Implementation Example</h2>
           <div className="bg-gray-900 text-gray-300 p-4 rounded-lg font-mono text-sm overflow-x-auto">
-            <pre>{tabContent[activeTab].implementation}</pre>
+            <pre>{tabContent[activeTab]?.implementation || 'Implementation examples coming soon.'}</pre>
           </div>
           
           <div className="mt-6">
