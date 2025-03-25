@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, AlertCircle, Clock, Settings, Search, Code, FileText, Link, Map, BarChart, RefreshCw, Circle } from 'lucide-react';
+import { CheckCircle, AlertCircle, Settings, Search, FileText, Link, Map, BarChart, RefreshCw, Circle } from 'lucide-react';
 import { getTasks, toggleTaskCompletion, calculateCompletion, calculateOverallCompletion } from '@/app/actions';
 
 // Define task interface for type safety

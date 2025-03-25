@@ -259,7 +259,7 @@ export default function SEODashboard() {
               <CardDescription>Task completion by category</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {tasks && Object.entries(tasks).map(([category, _]) => (
+              {tasks && Object.entries(tasks).map(([category]) => (
                 <div key={category} className="space-y-2">
                   <div className="flex justify-between">
                     <span className="capitalize text-sm font-medium">{category.replace(/_/g, ' ')}</span>

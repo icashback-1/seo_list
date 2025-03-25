@@ -1,4 +1,3 @@
-import Image from "next/image";
 import SEODashboard from "@/components/SEODashboard";
 
 export default function Home() {

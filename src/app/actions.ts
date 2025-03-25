@@ -32,6 +32,31 @@ const ACTIVITY_LOG_KEY = 'seo:activity_log';
 const SEO_SCORE_KEY = 'seo:score';
 const INTEGRATION_STATUS_KEY = 'seo:integrations';
 
+// Define the activity log interface
+interface ActivityLogEntry {
+    type: string;
+    message: string;
+    timestamp: number;
+}
+
+// Define the SEO score interface
+interface SEOScore {
+    overall: number;
+    content: number;
+    links: number;
+    performance: number;
+    mobile: number;
+    lastUpdated: string;
+}
+
+// Define the integration status interface
+interface IntegrationStatus {
+    google: boolean;
+    ahrefs: boolean;
+    semrush: boolean;
+    analytics: boolean;
+}
+
 // Function to initialize Redis with default data if not already present
 export async function initializeRedisData(): Promise<void> {
     try {
@@ -93,10 +118,10 @@ export async function getTasks(): Promise<TasksState> {
 }
 
 // Function to get activity log
-export async function getActivityLog(): Promise<any[]> {
+export async function getActivityLog(): Promise<ActivityLogEntry[]> {
     try {
         await initializeRedisData();
-        const log = await redis.get(ACTIVITY_LOG_KEY) as any[] | null;
+        const log = await redis.get(ACTIVITY_LOG_KEY) as ActivityLogEntry[] | null;
         return log || [];
     } catch (error) {
         console.error('Error fetching activity log:', error);
@@ -105,7 +130,7 @@ export async function getActivityLog(): Promise<any[]> {
 }
 
 // Function to add activity to log
-export async function addActivityLog(action: string, description: string, user: string = 'User'): Promise<void> {
+export async function addActivityLog(action: string, description: string): Promise<void> {
     try {
         const log = await getActivityLog();
         const newEntry = {
@@ -121,14 +146,14 @@ export async function addActivityLog(action: string, description: string, user: 
 }
 
 // Function to get SEO score
-export async function getSEOScore(): Promise<any> {
+export async function getSEOScore(): Promise<SEOScore> {
     try {
         await initializeRedisData();
-        const score = await redis.get(SEO_SCORE_KEY) as any | null;
+        const score = await redis.get(SEO_SCORE_KEY) as SEOScore | null;
         if (score) return score;
 
         // More realistic default SEO score data
-        const defaultScore = {
+        const defaultScore: SEOScore = {
             overall: 68,
             content: 72,
             links: 65,
@@ -153,14 +178,14 @@ export async function getSEOScore(): Promise<any> {
 }
 
 // Function to get integration status
-export async function getIntegrationStatus(): Promise<any> {
+export async function getIntegrationStatus(): Promise<IntegrationStatus> {
     try {
         await initializeRedisData();
-        const status = await redis.get(INTEGRATION_STATUS_KEY) as any | null;
+        const status = await redis.get(INTEGRATION_STATUS_KEY) as IntegrationStatus | null;
         if (status) return status;
 
         // Default integration status
-        const defaultStatus = {
+        const defaultStatus: IntegrationStatus = {
             google: false,
             ahrefs: false,
             semrush: false,
