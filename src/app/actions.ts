@@ -21,6 +21,10 @@ interface TasksState {
     ongoing: Task[];
     seo_analyst: Task[];
     backlinks: Task[];
+    indiancashback: Task[];
+    india_specific: Task[];
+    indiancashback_backlinks: Task[];
+    indiancashback_technical: Task[];
     [key: string]: Task[]; // Index signature for string keys
 }
 
@@ -263,6 +267,238 @@ export async function calculateOverallCompletion(tasks: TasksState): Promise<num
 // Default tasks for initialization
 function getDefaultTasks(): TasksState {
     return {
+        indiancashback: [
+            {
+                id: 1,
+                name: 'Optimize cashback category pages',
+                completed: false,
+                responsible: 'SEO Analyst',
+                description: 'Enhance category pages (Fashion, Home, Electronics, etc.) with unique descriptions, relevant keywords, and proper H1-H6 structure. Improves topical relevance and user engagement for IndianCashback\'s core offerings.'
+            },
+            {
+                id: 2,
+                name: 'Implement merchant-specific schema markup',
+                completed: false,
+                responsible: 'Frontend Developer',
+                description: 'Add structured data for cashback offers, store ratings, and merchant information. Enables rich snippets in search results showing cashback percentages and merchant ratings to improve CTR.'
+            },
+            {
+                id: 3,
+                name: 'Create merchant comparison content',
+                completed: false,
+                responsible: 'Content Writer',
+                description: 'Develop in-depth comparison content between popular merchants (e.g., Amazon vs Flipkart cashback). Target high-value keywords that shoppers use when comparing cashback options.'
+            },
+            {
+                id: 4,
+                name: 'Optimize site for "cashback + [store name]" keywords',
+                completed: false,
+                responsible: 'SEO Analyst',
+                description: 'Audit and optimize individual store pages for high-volume "cashback + [store name]" searches (e.g., "Amazon cashback", "Flipkart cashback"). Focus on title tags, meta descriptions, and content.'
+            },
+            {
+                id: 5,
+                name: 'Create seasonal cashback guides',
+                completed: false,
+                responsible: 'Content Writer',
+                description: 'Develop content for seasonal shopping events (Diwali, Republic Day, End of Season) showcasing highest cashback offers. Target seasonal shopping keywords to capture time-specific traffic.'
+            },
+            {
+                id: 6,
+                name: 'Implement FAQ schema for cashback questions',
+                completed: false,
+                responsible: 'Frontend Developer',
+                description: 'Add FAQ schema markup to answer common cashback questions. Improves chances of appearing in Google\'s featured snippets and "People also ask" sections for cashback-related queries.'
+            },
+            {
+                id: 7,
+                name: 'Create mobile app promotion structure',
+                completed: false,
+                responsible: 'Frontend Developer',
+                description: 'Optimize app download pages with structured data and app indexing. Improves visibility of IndianCashback\'s mobile app in search results and enables app-specific search features.'
+            },
+            {
+                id: 8,
+                name: 'Implement user review schema',
+                completed: false,
+                responsible: 'Frontend Developer',
+                description: 'Add schema markup for user reviews and ratings of IndianCashback service. Generates star ratings in search results to improve credibility and click-through rates.'
+            }
+        ],
+        india_specific: [
+            {
+                id: 1,
+                name: 'Optimize for India-specific search engines',
+                completed: false,
+                responsible: 'SEO Analyst',
+                description: 'While Google dominates the Indian market, ensure visibility on other platforms like Yahoo India. Different search engines may prioritize different ranking factors.'
+            },
+            {
+                id: 2,
+                name: 'Implement hreflang for regional targeting',
+                completed: false,
+                responsible: 'Frontend Developer',
+                description: 'Add hreflang tags to specify that content is targeted for Indian users (hi-IN, en-IN). Helps search engines serve the appropriate version of the site to users based on language and location.'
+            },
+            {
+                id: 3,
+                name: 'Create Hindi language content',
+                completed: false,
+                responsible: 'Content Writer',
+                description: 'Develop key pages in Hindi to reach broader Indian audience. Focus on popular shopping categories and cashback explanation content to improve visibility in Hindi-language searches.'
+            },
+            {
+                id: 4,
+                name: 'Register with Webmaster tools for Indian search engines',
+                completed: false,
+                responsible: 'SEO Analyst',
+                description: 'Submit sitemaps to Google India and other relevant local search platforms. Ensures proper indexing and monitoring of site performance in Indian search results.'
+            },
+            {
+                id: 5,
+                name: 'Target India-specific shopping festivals',
+                completed: false,
+                responsible: 'Content Writer',
+                description: 'Create SEO content targeting major Indian shopping events like Great Indian Festival, Big Billion Days, and Diwali sales. Optimize for festival-specific shopping keyword combinations.'
+            },
+            {
+                id: 6,
+                name: 'Optimize for mobile search',
+                completed: false,
+                responsible: 'Frontend Developer',
+                description: 'India is primarily a mobile-first market with over 700 million smartphone users. Ensure site is fully responsive, loads quickly on slower connections, and passes mobile-friendly tests.'
+            },
+            {
+                id: 7,
+                name: 'Build location-specific landing pages',
+                completed: false,
+                responsible: 'Content Writer',
+                description: 'Create optimized pages for major Indian cities (Delhi, Mumbai, Bangalore, etc.) with locally relevant cashback offers. Target "[city] + cashback" keywords to capture location-specific searches.'
+            },
+            {
+                id: 8,
+                name: 'Optimize for voice search in Indian English',
+                completed: false,
+                responsible: 'SEO Analyst',
+                description: 'Implement natural language patterns common in Indian English for voice search queries. Target long-tail conversational queries like "What is the best cashback for Flipkart in Delhi?"'
+            }
+        ],
+        indiancashback_backlinks: [
+            {
+                id: 1,
+                name: 'Analyze Indian cashback competitor backlinks',
+                completed: false,
+                responsible: 'SEO Analyst',
+                description: 'Conduct thorough analysis of backlink profiles for competing cashback sites like CashKaro, GrabOn, and PaisaWapas. Identify high-quality backlink sources to target for IndianCashback.'
+            },
+            {
+                id: 2,
+                name: 'Create partner outreach program',
+                completed: false,
+                responsible: 'Marketing',
+                description: 'Develop outreach strategy for Indian finance bloggers, deal sites, and shopping communities. Create partnership opportunities with mutual benefits to secure relevant backlinks.'
+            },
+            {
+                id: 3,
+                name: 'Build relationships with Indian e-commerce reviewers',
+                completed: false,
+                responsible: 'Marketing',
+                description: 'Connect with bloggers and YouTubers who review Indian e-commerce platforms. Provide exclusive cashback offers or affiliate partnerships in exchange for mentions and links.'
+            },
+            {
+                id: 4,
+                name: 'Develop shareable cashback infographics',
+                completed: false,
+                responsible: 'Content Writer',
+                description: 'Create data-driven infographics about Indian online shopping trends, cashback savings statistics, or festival shopping guides that will attract backlinks from news sites and blogs.'
+            },
+            {
+                id: 5,
+                name: 'Guest post on Indian personal finance sites',
+                completed: false,
+                responsible: 'Content Writer',
+                description: 'Identify top Indian personal finance blogs and pitch valuable content about saving money through cashback while shopping online. Focus on educational content with natural links to IndianCashback.'
+            },
+            {
+                id: 6,
+                name: 'Create a merchant-specific resource center',
+                completed: false,
+                responsible: 'Content Writer',
+                description: 'Develop comprehensive guides for maximizing cashback from major Indian retailers. Create link-worthy resources that shopping blogs and deal sites will reference and link to.'
+            },
+            {
+                id: 7,
+                name: 'Implement HARO strategy for Indian media',
+                completed: false,
+                responsible: 'SEO Analyst',
+                description: 'Utilize Help A Reporter Out (HARO) to connect with Indian journalists writing about e-commerce, online shopping, or personal finance. Provide expert quotes on cashback topics to earn media mentions and links.'
+            },
+            {
+                id: 8,
+                name: 'Create broken link building campaign',
+                completed: false,
+                responsible: 'SEO Analyst',
+                description: 'Identify broken links on Indian shopping, finance, and deal websites that point to defunct cashback resources. Create replacement content and reach out to webmasters with your solution.'
+            }
+        ],
+        indiancashback_technical: [
+            {
+                id: 1,
+                name: 'Optimize merchant page URL structure',
+                completed: false,
+                responsible: 'Frontend Developer',
+                description: 'Implement SEO-friendly URLs for merchant pages (e.g., indiancashback.com/amazon instead of indiancashback.com/store?id=12345). Clean, keyword-rich URLs improve both rankings and user trust.'
+            },
+            {
+                id: 2,
+                name: 'Implement cashback offer pagination',
+                completed: false,
+                responsible: 'Frontend Developer',
+                description: 'Add proper rel="next" and rel="prev" pagination for category pages with many cashback offers. Helps search engines understand content relationship and index offers efficiently.'
+            },
+            {
+                id: 3,
+                name: 'Optimize site for Core Web Vitals',
+                completed: false,
+                responsible: 'Frontend Developer',
+                description: 'Ensure LCP, FID, and CLS scores meet Google\'s standards on both mobile and desktop. Page experience is particularly important for cashback sites where users compare multiple offers.'
+            },
+            {
+                id: 4,
+                name: 'Implement price range schema',
+                completed: false,
+                responsible: 'Frontend Developer',
+                description: 'Add schema markup for cashback percentage ranges on category pages. Helps search engines understand offer values and can enhance rich snippets in search results.'
+            },
+            {
+                id: 5,
+                name: 'Create dynamic sitemap for offers',
+                completed: false,
+                responsible: 'Backend Developer',
+                description: 'Implement dynamically generated sitemap that updates with new cashback offers and merchants. Ensures search engines can discover and index new offers quickly.'
+            },
+            {
+                id: 6,
+                name: 'Fix merchant page duplicate content',
+                completed: false,
+                responsible: 'SEO Analyst',
+                description: 'Audit and fix duplicate content issues across similar merchant pages. Implement unique content templates and canonical tags to prevent dilution of ranking signals.'
+            },
+            {
+                id: 7,
+                name: 'Optimize cashback tracking parameters',
+                completed: false,
+                responsible: 'Backend Developer',
+                description: 'Ensure affiliate tracking parameters don\'t create duplicate content issues. Configure URL parameters in Google Search Console and implement proper canonicalization.'
+            },
+            {
+                id: 8,
+                name: 'Implement Progressive Web App',
+                completed: false,
+                responsible: 'Frontend Developer',
+                description: 'Convert site to PWA to improve mobile experience and enable offline functionality. PWAs typically have better engagement metrics, which indirectly improve SEO performance.'
+            }
+        ],
         technical: [
             {
                 id: 1,
