@@ -1,5 +1,5 @@
 import SEODashboard from "@/components/SEODashboard";
-import { getTasks, getActivityLog, getSEOScore, getIntegrationStatus, calculateOverallCompletion, calculateCompletion } from "@/app/actions";
+import { getTasks, calculateOverallCompletion, calculateCompletion } from "@/app/actions";
 
 // Enable ISR with a revalidation time of 60 seconds
 export const revalidate = 60;
@@ -8,9 +8,6 @@ export const revalidate = 60;
 export default async function Home() {
   // Fetch all data server-side
   const tasks = await getTasks();
-  const activityLog = await getActivityLog();
-  const seoScore = await getSEOScore();
-  const integrationStatus = await getIntegrationStatus();
   
   // Calculate completion percentages
   const overallCompletion = await calculateOverallCompletion(tasks);
@@ -29,9 +26,6 @@ export default async function Home() {
       
       <SEODashboard 
         initialTasks={tasks}
-        initialActivityLog={activityLog}
-        initialSeoScore={seoScore}
-        initialIntegrationStatus={integrationStatus}
         initialOverallCompletion={overallCompletion}
         initialCategoryCompletions={categoryCompletions}
       />
